@@ -15,9 +15,8 @@ while IFS= read -r line; do
     python3 sele.py "$line"
     python3 sele-hook.py "$line"
 done < "$CSV_FILE"
-python3 -W ignore label.py 
+python3 -W ignore label.py
 python3 -W ignore graph-plot/main.py
 python3 -W ignore graph-plot/makeFeatures.py
 python3 -W ignore surrogate/main.py
 python3 -W ignore generateSurrogateForChrome.py
-

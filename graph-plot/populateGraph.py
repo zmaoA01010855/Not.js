@@ -193,9 +193,12 @@ def createWebGraph(url):
 
                 # if its initiated by call stack javascript
                 # else its generated from main iframe
+                call_stack = dataset["call_stack"].get("stack")
+
                 if (
                     dataset["call_stack"]["type"] == "script"
-                    and "HTML@" + getInitiator(dataset["call_stack"]["stack"])
+                    and call_stack is not None
+                    and "HTML@" + getInitiator(call_stack)
                     not in nodes.keys()
                 ):
                     if (
@@ -206,7 +209,7 @@ def createWebGraph(url):
                         tar = addNode(
                             nodes,
                             "ScriptMethod@"
-                            + getInitiator(dataset["call_stack"]["stack"]),
+                            + getInitiator(call_stack),
                             "ScriptMethod",
                             1,
                             0,
@@ -214,7 +217,7 @@ def createWebGraph(url):
                         )
                         tar2 = addNode(
                             nodes,
-                            "Script@" + getInitiatorURL(dataset["call_stack"]["stack"]),
+                            "Script@" + getInitiatorURL(call_stack),
                             "Script",
                             1,
                             0,
@@ -224,7 +227,7 @@ def createWebGraph(url):
                         tar = addNode(
                             nodes,
                             "ScriptMethod@"
-                            + getInitiator(dataset["call_stack"]["stack"]),
+                            + getInitiator(call_stack),
                             "ScriptMethod",
                             0,
                             1,
@@ -232,7 +235,7 @@ def createWebGraph(url):
                         )
                         tar2 = addNode(
                             nodes,
-                            "Script@" + getInitiatorURL(dataset["call_stack"]["stack"]),
+                            "Script@" + getInitiatorURL(call_stack),
                             "Script",
                             0,
                             1,
