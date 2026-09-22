@@ -43,9 +43,12 @@ def CheckAncestoralNodes(callstack):
 
     # Initialize a set to track unique script URLs
     unique_scripts = set()
-    
+    stack = callstack.get("stack")
+    if stack is None:
+        return []
+
     # Recursively insert unique scripts in the stack
-    rec_stack_checker(callstack["stack"], unique_scripts)
+    rec_stack_checker(stack, unique_scripts)
 
     # Convert the set to a list and return it
     return list(unique_scripts)
@@ -259,9 +262,12 @@ def createWebGraphWithCallStack(url):
 
                 # if its initiated by call stack javascript
                 # else its generated from main iframe
+                call_stack = dataset["call_stack"].get("stack")
+
                 if (
                     dataset["call_stack"]["type"] == "script"
-                    and "HTML@" + getInitiator(dataset["call_stack"]["stack"])
+                    and call_stack is not None
+                    and "HTML@" + getInitiator(call_stack)
                     not in nodes.keys()
                 ):
                     if (
@@ -271,14 +277,14 @@ def createWebGraphWithCallStack(url):
                     ):
                         tar = addNode(
                             "ScriptMethod@"
-                            + getInitiator(dataset["call_stack"]["stack"]),
+                            + getInitiator(call_stack),
                             "ScriptMethod",
                             1,
                             0,
                             0,
                         )
                         tar2 = addNode(
-                            "Script@" + getInitiatorURL(dataset["call_stack"]["stack"]),
+                            "Script@" + getInitiatorURL(call_stack),
                             "Script",
                             1,
                             0,
@@ -289,14 +295,14 @@ def createWebGraphWithCallStack(url):
                     else:
                         tar = addNode(
                             "ScriptMethod@"
-                            + getInitiator(dataset["call_stack"]["stack"]),
+                            + getInitiator(call_stack),
                             "ScriptMethod",
                             0,
                             1,
                             0,
                         )
                         tar2 = addNode(
-                            "Script@" + getInitiatorURL(dataset["call_stack"]["stack"]),
+                            "Script@" + getInitiatorURL(call_stack),
                             "Script",
                             0,
                             1,

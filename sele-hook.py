@@ -70,7 +70,10 @@ def addBreakPoints(filename):
         for line in file:
             dataset = json.loads(line)
             if dataset["call_stack"]["type"] == "script":
-                val = getInitiator(dataset["call_stack"]["stack"])
+                call_stack = dataset["call_stack"].get("stack")
+                if call_stack is None:
+                    continue
+                val = getInitiator(call_stack)
                 if val is not None and val not in arr:
                     arr.append(val)
     url_inject = "chrome-extension://dkbabheepgaekgnabjadkefghhglljil/inject.js"

@@ -93,8 +93,11 @@ def CheckAncestoralNodes(dataset, callstack):
         return None
     # unique scripts in the stack
     unique_scripts = []
+    stack = callstack.get("stack")
+    if stack is None:
+        return None
     # recursively insert unique scripts in the stack
-    rec_stack_checker(callstack["stack"], unique_scripts)
+    rec_stack_checker(stack, unique_scripts)
     # check the tracking status of the unique scripts
     return check_script_url(dataset, unique_scripts)
 
