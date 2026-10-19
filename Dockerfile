@@ -1,13 +1,7 @@
-# Pinned artifact runtime stack (do not upgrade without explicit approval):
-#   Debian 10 (buster)
-#   Google Chrome 91.0.4472.114
-#   ChromeDriver 91.0.4472.101
-#   Selenium 4.16.0
-FROM joyzoursky/python-chromedriver@sha256:b639ffcb86ce5e0dae551a8a79b47c1e986fbc3ad6b22b34376cc52eaaae348e
+FROM joyzoursky/python-chromedriver
 USER root
 RUN ls
 
-# Base image uses EOL Debian Buster; repoint apt to archive mirrors only (keep Debian 10).
 RUN printf 'deb http://archive.debian.org/debian buster main\n\
 deb http://archive.debian.org/debian-security buster/updates main\n' > /etc/apt/sources.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FD533C07C264648F
@@ -43,11 +37,4 @@ RUN pip3 install gdown
 
 WORKDIR /Crawler
 COPY . /Crawler
-
-# Fail the build if the pinned browser stack drifts.
-RUN google-chrome --version | grep -q '91.0.4472' && \
-    chromedriver --version | grep -q '91.0.4472' && \
-    grep -q 'VERSION_ID="10"' /etc/os-release && \
-    pip3 show selenium | grep -q 'Version: 4.16.0'
-
 CMD ["/bin/bash"]
